@@ -73,10 +73,7 @@ python infer_rfdetr.py --model rfdetr.axmodel --image foo.jpg --conf 0.4
 | ![yolo9](image/sample_640x480_yolo9_axmodel.jpg) | ![dfine](image/sample_640x480_dfine_axmodel.jpg) | ![rfdetr](image/sample_640x480_rfdetr_axmodel.jpg) |
 
 ## 量子化精度に関する注意（U16）
-
 同梱の `.axmodel` は `pulsar2 6.0` / target=**AX650** / **U16 量子化** で変換しています。
-キャリブレーションは `sample_640x480.jpg` 1 枚を軽く水増しした 16 サンプルのみのため、
-モデルにより float ONNX 比で精度劣化があります（End2End cosine 類似度）:
 
 | モデル | 出力 cos | 判定 |
 |---|--:|---|
@@ -84,17 +81,6 @@ python infer_rfdetr.py --model rfdetr.axmodel --image foo.jpg --conf 0.4
 | dfine | **0.814** | ⚠️ 明確な劣化（DETR の集合予測・LayerNorm が量子化感度高） |
 | rfdetr | **0.812** | ⚠️ 明確な劣化（DINOv2 系 transformer + attention） |
 
-
-
-## 含まれるファイル
-
-```
-infer_yolo9.py / infer_dfine.py / infer_rfdetr.py   # 推論スクリプト(単一ファイル完結)
-yolo9.axmodel / dfine.axmodel / rfdetr.axmodel      # U16量子化済みモデル(AX650)
-sample_640x480.jpg                                  # サンプル入力画像
-image/sample_640x480_*_axmodel.jpg                  # 推論結果サンプル
-requirements.txt                                    # numpy / opencv-python
-```
 
 > `axengine` ランタイム本体は含めていません（[動作環境](#動作環境)・[セットアップ](#セットアップ)参照）。
 
