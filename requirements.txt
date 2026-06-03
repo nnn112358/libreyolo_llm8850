@@ -1,0 +1,11 @@
+# axengine 推論スクリプトの依存パッケージ。
+#
+# axengine 本体(ランタイム)はこのリポジトリには含めていません。
+# AX650N デバイス上で別途入手してください:
+#   - pyaxengine のリリース: https://github.com/AXERA-TECH/pyaxengine
+#   - またはデバイスの BSP / システムに同梱の axengine を使用
+# (axengine は cffi / ml-dtypes / numpy を要求します)
+#
+# 以下は推論スクリプト(infer_*.py)が直接 import するもの:
+numpy>=1.22
+opencv-python>=4.5
