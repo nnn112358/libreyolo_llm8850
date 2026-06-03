@@ -1,0 +1,32 @@
+{
+  "model_type": "ONNX",
+  "target_hardware": "AX650",
+  "npu_mode": "NPU3",
+  "quant": {
+    "input_configs": [
+      {
+        "tensor_name": "images",
+        "calibration_dataset": "/data/calib/yolo9.tar",
+        "calibration_format": "Numpy",
+        "calibration_size": 16
+      }
+    ],
+    "layer_configs": [
+      {
+        "start_tensor_names": [
+          "DEFAULT"
+        ],
+        "end_tensor_names": [
+          "DEFAULT"
+        ],
+        "data_type": "U16"
+      }
+    ],
+    "calibration_method": "MinMax",
+    "precision_analysis": false,
+    "precision_analysis_method": "EndToEnd"
+  },
+  "compiler": {
+    "check": 0
+  }
+}
