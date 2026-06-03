@@ -84,8 +84,7 @@ python infer_rfdetr.py --model rfdetr.axmodel --image foo.jpg --conf 0.4
 | dfine | **0.814** | ⚠️ 明確な劣化（DETR の集合予測・LayerNorm が量子化感度高） |
 | rfdetr | **0.812** | ⚠️ 明確な劣化（DINOv2 系 transformer + attention） |
 
-実運用では **多様な代表画像 数十〜数百枚での再キャリブレーション**を推奨します
-（他に transformer 最適化 / SmoothQuant / 混合精度 / `Percentile`・`MSE`・`KL` 法など）。
+
 
 ## 含まれるファイル
 
