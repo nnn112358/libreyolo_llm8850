@@ -6,9 +6,7 @@
 単一ファイル完結の最小スクリプト集です。
 
 ONNX を `pulsar2 6.0` で **U16 量子化**して `.axmodel` に変換済みのモデルを同梱しており、
-`axengine` + `OpenCV` + `NumPy` だけで NPU 推論が動きます。前処理・後処理は
-CPU 版（ONNX Runtime, [LibreYOLO](https://github.com/LibreYOLO/libreyolo)）と一致させてあり、
-**バックエンドだけを `onnxruntime` → `axengine` に差し替えた**ものです。
+`axengine` + `OpenCV` + `NumPy` だけで NPU 推論が動きます。
 
 ## 同梱モデル
 
