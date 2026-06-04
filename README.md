@@ -78,11 +78,26 @@ python infer_rfdetr.py --model rfdetr.axmodel --image foo.jpg --conf 0.4
 | モデル | 出力 cos | 判定 |
 |---|--:|---|
 | yolo9 | **0.99995** | ✅ ほぼ無劣化（CNN ベースは U16 に強い） |
-| dfine | **0.814** | ⚠️ 明確な劣化（DETR の集合予測・LayerNorm が量子化感度高） |
-| rfdetr | **0.812** | ⚠️ 明確な劣化（DINOv2 系 transformer + attention） |
+| dfine | **0.814** | ⚠️ box系cosは低いが…（下記の検出レベル評価を参照） |
+| rfdetr | **0.812** | ⚠️ box系cosは低いが…（下記の検出レベル評価を参照） |
 
+> 上記は precision_analysis の box 系 cos。ただし **cxcywh が密集する箱座標の cosine は劣化を過大評価**する癖がある。
+> 検出レベル（held-out 13枚, float ONNX 基準）で測り直すと実態は次のとおり（詳細・原因・対策は **[ACCURACY.md](ACCURACY.md)**）:
+
+| モデル | float再現(recall) | meanIoU | 実態 |
+|---|--:|--:|---|
+| yolo9 | — | — | ✅ ほぼ無損失。全NPUで使う |
+| rfdetr | 93.8% | 0.977 | ✅ 検出は良好。全NPUで使う |
+| dfine | 84.0% | 0.94 | ⚠️ 実際に劣化。**[`dfine_split/`](dfine_split/) の分割で recall 90% に回復** |
+
+劣化の主因は DETR decoder の **離散選択（TopK/GatherElements）のフリップ** と LayerNorm/Softmax の誤差増幅。
+backbone(CNN) は U16 でも cos 0.997 と無損失なので、**decoder だけ CPU FP32 に分割**すると大きく回復する。
+
+### 精度優先プリセット（dfine）
+[`dfine_split/`](dfine_split/) … backbone=NPU(U16) + decoder=CPU FP32 のハイブリッド。`python dfine_split/infer_dfine_hybrid.py` で実行。
 
 > `axengine` ランタイム本体は含めていません（[動作環境](#動作環境)・[セットアップ](#セットアップ)参照）。
+> 精度優先プリセット（dfine_split）は `axengine` に加えて `onnxruntime` も必要です。
 
 ## ライセンス
 
